@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  html {
+    font-family: Montserrat, system-ui, sans-serif;
+    font-weight: 600;
+  }
+}
+
+.box {
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+}
+
+.text-brand-default {
+  background: linear-gradient(102.47deg, #176FEB -5.34%, #FF80FF 106.58%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.wave-pattern{
+  background-image: url(../public/assets/illustrations/wave-pattern.svg);
+  background-repeat: no-repeat;
+  background-size: 280px;
+  background-position: center;
+}
