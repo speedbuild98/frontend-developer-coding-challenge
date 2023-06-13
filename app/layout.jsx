@@ -1,5 +1,14 @@
+import Head from 'next/head'
 import { Footer, NavBar } from './components'
 import './globals.css'
+
+import { Montserrat } from 'next/font/google'
+ 
+// If loading a variable font, you don't need to specify the font weight
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'Create Next App',
@@ -9,7 +18,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <Head>
+      </Head>
+      <body className={montserrat.className}>
       <NavBar />
         {children}
       <Footer />
