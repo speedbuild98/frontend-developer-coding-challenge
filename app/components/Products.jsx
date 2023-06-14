@@ -11,7 +11,7 @@ const Products = () => {
   const [sortType, setSortType] = useState("recent");
   const [sortedProducts, setSortedProducts] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = window.innerWidth >= 768 ? 16 : 8;
+  const itemsPerPage = 16;
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
 
