@@ -41,6 +41,7 @@ const Cards = () => {
   return (
     <section className="bg-brand-default w-full mt-[80px] flex flex-col justify-center items-center">
       <Image className="-mt-[85px]" src={heroResponsive} alt="hero-bg" />
+      <div className="flex-col flex gap-[6px] tablet:flex-row">
       <Card
         img={walkthroughResponsive1}
         alt="walkthroughResponsive1"
@@ -59,6 +60,7 @@ const Cards = () => {
         title="3—enjoy"
         text="All done We’ll take care of delivery of your tech item!"
       />
+      </div>
     </section>
   );
 };

@@ -31,9 +31,12 @@ module.exports = {
         'brand-light': '#E5F0FF',
         'brand-light2': '#CCE1FF',
       },
-      fontFamily: {
-        'montserrat': ['Montserrat'],
-    }
+      screens: {
+        'tablet': '640px',
+        // => @media (min-width: 640px) { ... }  
+        'desktop': '1280px',
+        // => @media (min-width: 1280px) { ... }
+      },
     },
   },
   plugins: [],

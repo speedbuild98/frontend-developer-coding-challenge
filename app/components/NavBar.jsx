@@ -35,52 +35,93 @@ const Button = ({ number, activeButton, setActiveButton }) => {
   );
 };
 
-
-
-function MyPopover() {
-
+function MyPopover({updatePoints}) {
   const [user, setData] = useState(null);
-  const token = process.env.AEROLAB_API_TOKEN;
-
-  const [points, setPoints] = useState();
 
   const [activeButton, setActiveButton] = useState(5000);
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  const handleScore = () => {
-    setPoints(points + activeButton);
-    console.log("El valor actual es " + setPoints);
-  };
+  const [isLoading, setIsLoading] = useState(false);
+
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg1ZmZjZmM1N2M0ZjAwMjBiYmNjMDMiLCJpYXQiOjE2ODY1MDMzNzV9.TUgUA08fIRH32H0G42ATn7oZIlDxghLXzdG5CjZb76A";
 
   const handlePopoverToggle = () => {
     setIsPopoverOpen(!isPopoverOpen);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("https://coding-challenge-api.aerolab.co/user/me", {
-        headers: {
-          accept: 'application/json',
-          content: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg1ZmZjZmM1N2M0ZjAwMjBiYmNjMDMiLCJpYXQiOjE2ODY1MDMzNzV9.TUgUA08fIRH32H0G42ATn7oZIlDxghLXzdG5CjZb76A',
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        "https://coding-challenge-api.aerolab.co/user/me",
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      const json = await res.json();
-      setData(json);
-    };
+      );
 
+      if (res.ok) {
+        const json = await res.json();
+        setData(json);
+      } else {
+        console.log("Error al obtener los datos del usuario.");
+      }
+    } catch (error) {
+      console.log("Error en la solicitud:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [token]);
+
+  const handleScore = async () => {
+    const amount = activeButton;
+    setIsLoading(true); // Establecer isLoading a true antes de realizar la solicitud
+    try {
+      const res = await fetch(
+        "https://coding-challenge-api.aerolab.co/user/points",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ amount }),
+        }
+      );
+
+      if (res.ok) {
+        console.log("Puntos agregados exitosamente.");
+        fetchData(); // Volver a obtener los datos del usuario después de agregar los puntos
+      } else {
+        console.log("Error al agregar los puntos.");
+      }
+    } catch (error) {
+      console.log("Error en la solicitud:", error);
+    } finally {
+      setIsLoading(false); // Establecer isLoading a false después de realizar la solicitud
+    }
+  };
 
   return (
     <div className="z-50">
       <div
         onClick={handlePopoverToggle}
-        className="relative flex flex-row min-w-[143px] h-[40px] pl-[16px] pr-[20px] border box border-300 justify-between items-center outline-none"
+        className="cursor-pointer relative flex flex-row min-w-[143px] h-[40px] pl-[16px] pr-[20px] border box border-300 justify-between items-center outline-none"
       >
         <Image src={aeroPay1} alt="AeroLab Logo" width={24} height={24} />
-        <p className="text-brand-default pl-[8px] pr-[16px]">{user ? user.points : 'Loading...'}</p>
+        <p
+          className={`text-brand-default pl-[8px] pr-[16px] ${
+            isLoading && "animate-pulse"
+          }`}
+        >
+          {user ? user.points : ". . ."}
+        </p>
+
         <Image
           className={`${
             isPopoverOpen ? "rotate-90" : "-rotate-90"
@@ -91,7 +132,11 @@ function MyPopover() {
       </div>
 
       {isPopoverOpen && (
-        <div className="absolute right-[20px] mt-[8px] z-100">
+        <div
+        className={`absolute right-[20px] mt-[8px] z-100 ${
+          isPopoverOpen ? 'opacity-100 max-h-[404px]' : 'opacity-0 max-h-0'
+        } transition-opacity duration-300 ease-in-out overflow-hidden`}
+      >
           <div className="flex flex-col box h-[404px] w-[312px] bg-white items-center border border-300">
             <div className="flex justify-between border-b w-full px-[24px] py-[16px]">
               <p className="text-[18px]">Add Balance</p>
@@ -148,11 +193,35 @@ function MyPopover() {
 }
 
 const NavBar = () => {
+
+  const updatePoints = async () => {
+    try {
+      const res = await fetch(
+        "https://coding-challenge-api.aerolab.co/user/me",
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        const json = await res.json();
+        setData(json);
+      } else {
+        console.log("Error al obtener los datos del usuario.");
+      }
+    } catch (error) {
+      console.log("Error en la solicitud:", error);
+    }
+  };
+
   return (
     <nav className="fixed flex top-0 w-full h-[128px] items-center px-[20px] bg-white border-b border-300 z-1000">
       <div className="flex flex-row items-center w-full justify-between">
         <Image src={aeroLabLogo2} alt="AeroLab Logo" />
-        <MyPopover/>
+        <MyPopover />
       </div>
     </nav>
   );
