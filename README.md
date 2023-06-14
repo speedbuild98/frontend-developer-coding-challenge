@@ -1,4 +1,4 @@
-# WORK IN PROGRESS
+# WORK INCOMPLETE!!!!
 # I only developed the mobile view and it's incomplete!
 
 https://frontend-developer-coding-challenge-flame.vercel.app/
